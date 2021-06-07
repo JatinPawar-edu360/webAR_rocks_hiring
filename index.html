@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="en-EN" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    <title>WebAR.rocks.face texture based makeup demo</title>
+    <title>ARious Tribe</title>
+    <link rel="shortcut icon" type="image/png" href="https://cdn.glitch.com/6d2d0e83-d9d0-40cd-9ff8-57bab1741c53%2Ffavicon.png?v=1622732193297"/>
     
     <!-- INCLUDE WebAR.rocks.face MAIN SCRIPT -->
     <script src="./dist/WebARRocksFace.js"></script>
@@ -20,6 +21,28 @@
     
     <!-- INCLUDE DEMO SCRIPT -->
     <script src="./main.js"></script>
+    
+    <!-- Start myStuff -->
+    
+    <!-- IMPORT CUSTOM STYLESHEET -->
+    <link rel="stylesheet" href="./index.css">
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css"
+    rel="stylesheet"
+    />
+    
+    <!-- End myStuff -->
 
     <style type="text/css">
       body {
@@ -44,8 +67,92 @@
 
   </head>
   <body onload="main()">
-    <canvas width="600" height="600" id='WebARRocksFaceCanvasAR'></canvas>
-    <canvas width="600" height="600" id='WebARRocksFaceCanvasVideo'></canvas>
+    <div class="loader" id="loadingScreen"></div>
+    <canvas width="600" height="600" id="WebARRocksFaceCanvasAR" ></canvas>
+    <canvas width="600" height="600" id="WebARRocksFaceCanvasVideo" ></canvas>
+    <div class="container align-content-center justify-content-center" style="display: grid;  place-items: center;  ">
+
+      <div class="card border text-center inner col-md-8" style="z-index: 1; grid-area: inner-div;" id="cameraPermissionsInfo" >
+        <div class="vecticleSpace"></div>
+        <div class="card-body">
+        
+          <h5 class="card-title " id="browser">IMPORTANT INFO</h5>
+          <div class="vecticleSpace"></div>
+          <p class="card-text">
+            To experience the magic of AR we need your permission. Kindly give camera permissions when asked for.
+          </p>
+          <div class="vecticleSpace"></div>
+          <button type="button" class="btn btn-primary" onclick="getPermission()">Got It</button>
+          
+        </div>
+        <div class="vecticleSpace"></div>
+      </div>
+
+      <div class="card border text-center inner col-md-8" style=" z-index: 1; grid-area: inner-div; visibility: hidden;" id="cameraPermissionsError" >
+        <div class="card-body">
+          <h5 class="card-title ">Camera Access Needed</h5>
+          <p class="card-text errorText" align="left">
+            1. Lets enable your camera.
+          </p>
+          <p class="card-text errorText" align="left">
+            2. Tap the <i class="fas fa-lock"></i> in the top left
+          </p>
+          <p class="card-text errorText" align="left">
+            3. Select "Permissions" / "Site Settings"
+          </p>
+          <p class="card-text errorText" align="left">
+            4. Tap the "Reset permissions"
+          </p>
+          <p class="card-text errorText" align="left">
+            5. Click on "Done" given below and allow camera access when asked.
+          </p>          
+          <div class="vecticleSpace"></div>
+          <button type="button" class="btn btn-primary" onclick="ReloadPage()">Done</button>          
+          
+        </div>
+        <div class="vecticleSpace"></div>
+      </div>
+      
+      <div class="card border text-center inner col-md-8" style=" z-index: 1; grid-area: inner-div; visibility: hidden;" id="cameraPermissionsErroriOS" >
+        <div class="card-body">
+          <h5 class="card-title ">Open in Safari</h5>
+          <p class="card-text " align="justify">
+            It seems like you are on an iOS device. To experience AR on iOS, we need to move to Safari.          
+          </p>
+          <p class="card-text " align="justify">
+            Tap "Launch Safari" to auto-copy website link and to open Safari. 
+          </p>
+          <p class="card-text " align="justify">
+            Once in safari, simply paste the auto-copied link in address bar and experinece AR.
+          </p>          
+          <div class="vecticleSpace"></div>
+
+          
+          <button type="button" class="btn btn-primary" id="safariBtn">Launch Safari</button>     
+          
+        </div>
+        <div class="vecticleSpace"></div>
+      </div>
+      
+      
+    </div>    
+    
+    <div class="col-sm-4 col-md-4 col-lg-4" style=" z-index: 100;" >
+      <button  type="button" id="redirectToLinkedInBtn" onclick="RedirectToSwapnilProfile()" >
+          <i class="fab fa-linkedin"></i> DM us to join the Tribe
+      </button>
+      
+      
+    </div>
+    
+        
+      
   </body>
+  
+    <!-- MDB -->
+  <script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.js"
+  ></script>
 </html>
  

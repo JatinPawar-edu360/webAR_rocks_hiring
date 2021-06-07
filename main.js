@@ -1,4 +1,6 @@
 let _canvasVideo = null, _canvasAR = null;
+var MaskSrc = ["assets/makeup.png", "assets/makeup_0.png", "assets/makeup2.png"];
+
 
 const borderHardness = {
   eyes: 0.7,
@@ -578,12 +580,13 @@ const SHAPEFACE = {
   
   textures: [{
     id: 'color',
-    src: 'assets/makeup2.png'
+    src: String(MaskSrc[Math.floor(Math.random() * MaskSrc.length)]),
   }]
 }; // END SHAPEFACE
 
 
 function start(){
+  loadingScreen.style.display="unset";
   WebARRocksFaceShape2DHelper.init({
     NNCPath: './neuralNets/NN_FULLMAKEUP_3.json',
     canvasVideo: _canvasVideo,
@@ -592,20 +595,115 @@ function start(){
     //,videoURL: '../../../../testVideos/1032526922-hd.mov'
   }).then(function(){
     console.log('READY');
+    loadingScreen.style.display="none";
+    applyButton.style.visibility="visible";
   }).catch(function(err){
     throw new Error(err);
   });
 }
 
+var cameraPermissionInfoDiv;
+var cameraPermissionErrorDiv;
+var cameraPermissionErroriOsDiv;
+var applyButton;
+var loadingScreen;
+var safariBtn;
+let userAgentString = navigator.userAgent;
+
 // entry point:
 function main(){
+  
+  console.log("Main called !!!");
+  console.log(typeof(MaskSrc[1]));
   _canvasAR = document.getElementById('WebARRocksFaceCanvasAR');
   _canvasVideo = document.getElementById('WebARRocksFaceCanvasVideo');
+  cameraPermissionInfoDiv = document.getElementById("cameraPermissionsInfo");
+  cameraPermissionErrorDiv = document.getElementById("cameraPermissionsError");
+  cameraPermissionErroriOsDiv = document.getElementById('cameraPermissionsErroriOS');
+  applyButton = document.getElementById("redirectToLinkedInBtn");
+  loadingScreen = document.getElementById("loadingScreen");
+  safariBtn = document.getElementById("safariBtn");
+
+  safariBtn.onclick = function() {
+    Clipboard_CopyTo("https://webar-rocks-hiring-ar.glitch.me");
+    window.location.href = "x-web-search://?";
+    alert("Paste the " + "https://webar-rocks-hiring-ar.glitch.me");
+  };
   
-  WebARRocksResizer.size_canvas({
+  if (userAgentString.indexOf("iOS") > -1 || userAgentString.indexOf("Mac OS") > -1) {
+    if(userAgentString.indexOf("Safari") > -1){
+          cameraPermissionInfoDiv.style.visibility = "visible";
+          cameraPermissionErroriOsDiv.style.visibility = "hidden";
+          cameraPermissionErrorDiv.style.visibility = "hidden";
+        }else{
+          cameraPermissionInfoDiv.style.visibility = "hidden";
+          cameraPermissionErroriOsDiv.style.visibility = "visible";
+          cameraPermissionErrorDiv.style.visibility = "hidden";
+        }
+      }else{
+        cameraPermissionInfoDiv.style.visibility = "visible";
+        cameraPermissionErroriOsDiv.style.visibility = "hidden";
+        cameraPermissionErrorDiv.style.visibility = "hidden";
+        
+      }
+}
+
+function Clipboard_CopyTo(value) {
+      var tempInput = document.createElement("input");
+      tempInput.value = value;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+    }
+
+
+function ReqLinkedIn() {
+  window.location.href = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&state=987654321&scope=r_liteprofile%20r_emailaddress&client_id=786avy2uqtahhk&redirect_uri=https%3A%2F%2Fropjbtx26d.execute-api.us-east-2.amazonaws.com%2Fdefault%2Flinkedinsocial";
+}
+
+function RedirectToSwapnilProfile() {
+
+  window.location.href = "https://www.linkedin.com/in/swapnilagarkar/";
+}
+
+function getPermission(){
+  console.log("Clicked");
+
+  var successCallback = function(error) {
+    console.log("Granted");
+    cameraPermissionInfoDiv.style.visibility = "hidden";
+    cameraPermissionErrorDiv.style.visibility = "hidden";
+    cameraPermissionErroriOsDiv.style.visibility = "hidden";
+  
+    WebARRocksResizer.size_canvas({
     canvas: _canvasVideo,
     overlayCanvas: [_canvasAR],
     callback: start,
     isFullScreen: true
   });
+    
+    // user allowed access to camera
+  };
+  var errorCallback = function(error) {
+    if (error.name == 'NotAllowedError') {
+      console.log("Denied");
+      cameraPermissionInfoDiv.style.visibility = "hidden";
+      if (userAgentString.indexOf("iOS") > -1 || userAgentString.indexOf("Mac OS") > -1) {
+          location.reload()
+      }else{
+        cameraPermissionErrorDiv.style.visibility = "visible";
+        cameraPermissionInfoDiv.style.visibility = "hidden";
+        cameraPermissionErroriOsDiv.style.visibility = "hidden";
+      }
+      // user denied access to camera
+    }
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+  .then(successCallback, errorCallback);
+}
+
+function ReloadPage(){
+  location.reload();
 }
